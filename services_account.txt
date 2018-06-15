@@ -1,5 +1,10 @@
 ### Tạo service account de dang nhap dashboad kubernetes ###
 
+
+###Step 0: Truy cập vào dashboad kubernetes
+
+kubectl proxy
+
 ###Step 1: tạo server account với namespace
 
 cat <<EOF | kubectl create -f -
