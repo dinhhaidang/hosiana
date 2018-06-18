@@ -18,12 +18,12 @@ metadata:
   name: mongo
 spec:
   serviceName: "mongo"
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
         role: mongo
-        environment: test_prod
+        environment: test
     spec:
       terminationGracePeriodSeconds: 10
       containers:
@@ -33,6 +33,8 @@ spec:
             - mongod
             - "--replSet"
             - rs0
+            - "--bind_ip"
+            - 0.0.0.0
             - "--smallfiles"
             - "--noprealloc"
           ports:
@@ -54,4 +56,4 @@ spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
-          storage: 60Gi
+          storage: 2Gi
