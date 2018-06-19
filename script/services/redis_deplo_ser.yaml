@@ -1,0 +1,39 @@
+# Request a persistent volume from the cluster using a Persistent Volume Claim.
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: redisdata
+  annotations:
+    volume.alpha.kubernetes.io/storage-class: faster-ssd
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 10Gi
+--- 
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: redis
+spec:
+  replicas: 2
+  selector:
+    name: redis
+  template:
+    metadata:
+      labels:
+        name: redis
+    spec:
+      containers:
+      - name: redis
+        image: launcher.gcr.io/google/redis4
+        ports:
+        - containerPort: 6379
+        volumeMounts:
+        - name: redisdata
+          mountPath: /data
+          subPath: redisdata
+      volumes:
+        - name: redisdata
+          persistentVolumeClaim:
+            claimName: redisdata
