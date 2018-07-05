@@ -1,0 +1,7 @@
+Error from server (Forbidden): error when creating "STDIN": clusterroles.rbac.authorization.k8s.io "cattle-admin" is forbidden: attempt to grant extra privileges: [PolicyRule{Resources:["*"], APIGroups:["*"], Ver
+bs:["*"]} PolicyRule{NonResourceURLs:["*"], Verbs:["*"]}] user=&{dinh@cloud-ace.com  [system:authenticated] map[]} ownerrules=[PolicyRule{Resources:["selfsubjectaccessreviews" "selfsubjectrulesreviews"], APIGroup
+s:["authorization.k8s.io"], Verbs:["create"]} PolicyRule{NonResourceURLs:["/api" "/api/*" "/apis" "/apis/*" "/healthz" "/swagger-2.0.0.pb-v1" "/swagger.json" "/swaggerapi" "/swaggerapi/*" "/version"], Verbs:["get
+"]}] ruleResolutionErrors=[]
+
+#Chay lenh nay:
+kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user dinh@cloud-ace.com
