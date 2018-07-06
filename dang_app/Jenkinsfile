@@ -1,12 +1,13 @@
 node {
-  def project = 'main-nova-202405'
-  def appName = 'nginx'
-  def feSvcName = "${appName}-frontend"
-  def imageTag = "gcr.io/${project}/${appName}:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
-  
-  def appName1 = 'node'
-  def feSvcName1 = "${appName1}-frontend"
+  def project = 'vn-cloudace-dataengine-2018'
+  //khai bao nginx
+  def appName1 = 'nginx'
+  def feSvcName1 = "${appName1}"
   def imageTag1 = "gcr.io/${project}/${appName1}:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
+  //khai bao nodejs
+  def appName2 = 'node'
+  def feSvcName2 = "${appName2}"
+  def imageTag2 = "gcr.io/${project}/${appName2}:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
   
   def CLUSTER = "jenkins-cd"
   def ZONE = "asia-southeast1-c"
@@ -20,34 +21,34 @@ node {
   checkout scm
 
   stage 'Build image'
-  sh("docker build -t ${imageTag} -f nginx/nginx.Dockerfile .")
-  sh("docker build -t ${imageTag1} -f nodejs/node.dockerfile .")
+  sh("docker build -t ${imageTag1} -f nginx/nginx.Dockerfile .")
+  sh("docker build -t ${imageTag2} -f nodejs/node.dockerfile .")
 
   stage 'Run nginx tests'
-  //sh("docker run ${imageTag} nginx test")
-  //sh("docker run ${imageTag1} node test")
+  //sh("docker run ${imageTag1} nginx test")
+  //sh("docker run ${imageTag2} node test")
 
   stage 'Push image to registry'
-  sh("gcloud docker -- push ${imageTag}")
   sh("gcloud docker -- push ${imageTag1}")
+  sh("gcloud docker -- push ${imageTag2}")
   
   //---------------------------------------------------------------
   stage "Deploy Application"
   switch (env.BRANCH_NAME) {
-    // Roll out to canary environment
+    // Branch name ten la canary
     case "canary":
         // Change deployed image in canary to the one we just built
-        sh("sed -i.bak 's#gcr.io/cloud-solutions-images/gceme:1.0.0#${imageTag}#' ./k8s/canary/*.yaml")
+        sh("sed -i.bak 's#gcr.io/cloud-solutions-images/gceme:1.0.0#${imageTag1}#' ./k8s/canary/*.yaml")
         sh("kubectl --namespace=production apply -f k8s/services/")
         sh("kubectl --namespace=production apply -f k8s/canary/")
         sh("echo http://`kubectl --namespace=production get service/${feSvcName} --output=json | jq -r '.status.loadBalancer.ingress[0].ip'` > ${feSvcName}")
         break
 
-    // Roll out to production
+    // Branch name ten la master
     case "master":
         // Change deployed image in canary to the one we just built
-        sh("sed -i.bak 's#gcr.io/main-nova-202405/nginx:master.19#${imageTag}#' ./k8s/production/*.yaml")
-		sh("sed -i.bak 's#gcr.io/main-nova-202405/node:master.19#${imageTag1}#' ./k8s/production/*.yaml")
+        sh("sed -i.bak 's#gcr.io/main-nova-202405/nginx:master.22#${imageTag}#' ./k8s/production/*.yaml")
+		sh("sed -i.bak 's#gcr.io/main-nova-202405/node:master.22#${imageTag1}#' ./k8s/production/*.yaml")
         sh("kubectl --namespace=production apply -f k8s/services/")
         sh("kubectl --namespace=production apply -f k8s/production/")
         sh("echo http://`kubectl --namespace=production get service/${feSvcName} --output=json | jq -r '.status.loadBalancer.ingress[0].ip'` > ${feSvcName}")

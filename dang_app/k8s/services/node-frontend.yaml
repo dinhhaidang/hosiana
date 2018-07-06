@@ -25,4 +25,4 @@ spec:
     protocol: TCP
   selector:
     app: node
-    #role: node-frontend
+    role: node-frontend

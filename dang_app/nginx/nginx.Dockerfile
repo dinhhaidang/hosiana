@@ -12,13 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#FROM nginx:1.14.0
-FROM nginx:alpine
-MAINTAINER Khai <khai@cloud-ace.com>
-#COPY php/content /srv/www/content
-COPY static /srv/www/static
-ADD nginx/default.conf /etc/nginx/conf.d/default.conf
-#ADD index.html /var/www/html/index.html
-#ADD . /var/www/html/
+FROM nginx:1.14.0
+#MAINTAINER Khai <khai@cloud-ace.com>
+#COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+#ADD ./nginx/default.conf /etc/nginx/conf.d/default.conf
+ADD ./nginx/index.html /usr/share/nginx/html
+##ADD . /var/www/html/
 EXPOSE 80
 

@@ -12,14 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #FROM node:8.11.3
-FROM node:alpine
+#FROM node:alpine
+FROM huseyinbabal/node-example
 MAINTAINER Khai <khai@cloud-ace.com>
-WORKDIR /home/app
+ENV NODE_ENV=production
 COPY nodejs /home/app
-#RUN npm install
-#ADD ./nginx/default.conf /etc/nginx/conf.d/default.conf
-#ADD index.html /var/www/html/index.html
-#ADD . /var/www/html/
 EXPOSE 8080
 CMD ["node", "index"]
 

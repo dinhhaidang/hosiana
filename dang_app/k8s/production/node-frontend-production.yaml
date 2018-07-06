@@ -23,14 +23,17 @@ spec:
       name: node-frontend
       labels:
         app: node
+        role: node-frontend
+        env: production
     spec:
       containers:
       - name: node-frontend-container
-        image: gcr.io/main-nova-202405/node:master.19
+        image: gcr.io/main-nova-202405/node:master.22
         resources:
           limits:
             memory: "1500Mi"
             cpu: "400m"
+        imagePullPolicy: Always
         ports:
         - name: node-frontend
           containerPort: 8080

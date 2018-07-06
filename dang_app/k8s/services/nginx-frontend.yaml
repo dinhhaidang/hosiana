@@ -25,4 +25,4 @@ spec:
     protocol: TCP
   selector:
     app: nginx
-    #role: nginx-frontend
+    role: nginx-frontend

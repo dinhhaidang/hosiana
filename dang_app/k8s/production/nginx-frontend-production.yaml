@@ -23,14 +23,17 @@ spec:
       name: nginx-frontend
       labels:
         app: nginx
+        role: nginx-frontend
+        env: production
     spec:
       containers:
       - name: nginx-frontend-container
-        image: gcr.io/main-nova-202405/nginx:master.19
+        image: gcr.io/main-nova-202405/nginx:master.22
         resources:
           limits:
             memory: "1500Mi"
             cpu: "400m"
+        imagePullPolicy: Always
         ports:
         - name: nginx-frontend
           containerPort: 80

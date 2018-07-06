@@ -7,9 +7,9 @@ var MongoUrl = 'mongodb://mongo-0.mongo:27017/dbname_?';
 app.get('/', function(req, res) {
     MongoClient.connect(MongoUrl, function(err, db) {
         if (err !== null) {
-            res.send('Could not connect to MongoDB test ok em yeu oi troi oi chua qua sd ssss');
+            res.send('Could not connect to MongoDB sss nn dfd');
         } else {
-            res.send('Connected to MongoDB test sao the em sao kho the ewr er ');
+            res.send('Connected to MongoDB');
             db.close();
         }
     });
